@@ -10,7 +10,35 @@ from colorama import Fore, Style, init
 init(autoreset=True)
 
 
-def load_wordlist(wordlist_file: t.Union[pathlib.Path, str]) -> t.List[str]:
+WORDLIST_URL = "https://github.com/halfstackpgr/pytha-fuzz/blob/main/wordlist.txt"
+
+
+async def download_wordlist(url: str, save_path: str) -> bool:
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+            if response.status_code == 200:
+                async with aiofiles.open(save_path, "wb") as file:
+                    await file.write(response.content)
+                return True
+            else:
+                print(Fore.RED + f"Failed to download wordlist. Status code: {response.status_code}")
+                return False
+    except Exception as e:
+        print(Fore.RED + f"An error occurred while downloading the wordlist: {e}")
+        return False
+
+def load_wordlist(wordlist_file: t.Optional[t.Union[pathlib.Path, str]]) -> t.List[str]:
+    if wordlist_file is None:
+        print(Fore.YELLOW + "No wordlist provided. Downloading default wordlist...")
+        download_path = "wordlist.txt"
+        if not asyncio.run(download_wordlist(WORDLIST_URL, download_path)):
+            print(Fore.RED + "Failed to download the default wordlist. Exiting...")
+            sys.exit(1)
+        else:
+            print(Fore.GREEN + "Default wordlist downloaded successfully.")
+            wordlist_file = download_path
+
     try:
         with open(wordlist_file, "r") as file:
             return [line.strip() for line in file.readlines()]
@@ -187,4 +215,3 @@ def main():
 
     if args.output:
         sys.exit(0)
-
