@@ -2,6 +2,13 @@
 
 ![FUZZER Logo](https://static.thenounproject.com/png/2221438-200.png)
 
+
+
+> [!WARN]
+> The current author does not own the repository. It is owned by [Shivang](https://github.com/shivangmauryaa/pytha-fuzz). This is just a module distribution instead of direct source code. Kindly star the original repository if you want to.
+
+
+
 ## Introduction
 
 FUZZER is a simple pytha-fuzz tool developed by Shivang-Maurya It helps you discover directories on a target website by probing different paths. This tool is designed for security testing, web application analysis, and penetration testing.
@@ -17,15 +24,15 @@ FUZZER is a simple pytha-fuzz tool developed by Shivang-Maurya It helps you disc
 
 ## Installation
 
-1. Clone the repository:
-
+1. Install from Build:
    ```shell
    git clone https://github.com/shivangmauryaa/pytha-fuzz.git
    cd pytha-fuzz
+   python setup.py install
    ```
-2. Install the required packages:
+2. Install from PyPi as Module (Recommended):
    ```shell
-   pip install -r requirements.txt
+   pip install pytha-fuzz
    ```
 
 ## Usage
@@ -43,8 +50,8 @@ Use the following command-line arguments to run pytha-fuzz:
 
 Example usage:
 ```shell
-python3 pytha.py -u http://example.com -w wordlist.txt -o output.txt    // Custom
-python3 pytha.py -u http://example.com // Auto
+fuzz -u http://example.com -w wordlist.txt -o output.txt    // Custom
+fuzz -u http://example.com // Auto
 ```
 
 
@@ -54,6 +61,8 @@ python3 pytha.py -u http://example.com // Auto
 <br>
 [linkedin](https://www.linkedin.com/in/shivangmauryaa/)
 <br>
+
+## Dist Maintainer:
 
 ## License
 
