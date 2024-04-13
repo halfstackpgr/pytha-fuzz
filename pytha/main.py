@@ -30,12 +30,13 @@ async def download_wordlist(url: str, save_path: str) -> bool:
         print(Fore.RED + f"An error occurred while downloading the wordlist: {e}")
         return False
 
+
 def load_wordlist(wordlist_file: t.Union[pathlib.Path, str]) -> list[str]:
     if isinstance(wordlist_file, pathlib.Path):
         wordlist_path = wordlist_file
     else:
         wordlist_path = pathlib.Path(wordlist_file)
-        
+
     if wordlist_path.exists() is False:
         print(Fore.YELLOW + "No wordlist provided. Downloading default wordlist...")
         download_path = "wordlist.txt"
@@ -142,7 +143,7 @@ async def dirsearch(
                                 Fore.YELLOW
                                 + f"Network error (retrying {retries}/{max_retries}): {e}"
                             )
-                            await asyncio.sleep(2 ** retries)
+                            await asyncio.sleep(2**retries)
                         else:
                             print(
                                 Fore.RED + f"Network error (max retries reached): {e}"
