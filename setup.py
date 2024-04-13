@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="pytha-fuzz",
-    version="1.0",
+    version="1.1",
     author="Parth Mishra",
     author_email="halfstackpgr@gmail.com",
     description="PYTHA is a Python-based directory fuzzer tool designed to aid in the discovery of hidden or sensitive directories and files on web servers. Originally developed by Shivang. Packed and moduled by the author.",
