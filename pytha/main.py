@@ -10,7 +10,7 @@ from colorama import Fore, Style, init
 init(autoreset=True)
 
 
-WORDLIST_URL = "https://github.com/halfstackpgr/pytha-fuzz/blob/main/wordlist.txt"
+WORDLIST_URL = "https://github.com/halfstackpgr/pytha-fuzz/files/14965225/wordlist.txt"
 
 
 async def download_wordlist(url: str, save_path: str) -> bool:
@@ -29,7 +29,9 @@ async def download_wordlist(url: str, save_path: str) -> bool:
         return False
 
 def load_wordlist(wordlist_file: t.Optional[t.Union[pathlib.Path, str]]) -> t.List[str]:
-    if wordlist_file is None:
+    if isinstance(wordlist_file, str):
+        wordlist_path = pathlib.Path(wordlist_file)
+    if wordlist_path.exists() is False:
         print(Fore.YELLOW + "No wordlist provided. Downloading default wordlist...")
         download_path = "wordlist.txt"
         if not asyncio.run(download_wordlist(WORDLIST_URL, download_path)):
