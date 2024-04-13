@@ -76,3 +76,6 @@ This tool is licensed under the MIT License. See the LICENSE file for details.
 
 ## Support
 For bug reports, feature requests, or general inquiries, please create an issue. for more good result use your self made wordlist 
+
+Default Wordlist:
+[wordlist.txt](https://github.com/halfstackpgr/pytha-fuzz/files/14965324/wordlist.txt)
