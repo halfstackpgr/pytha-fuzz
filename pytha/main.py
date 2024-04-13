@@ -1,53 +1,50 @@
-import typing as t
 import argparse
-import httpx
 import asyncio
-import sys
 import aiofiles
+import aiohttp
 import pathlib
+import sys
+import typing as t
 from colorama import Fore, Style, init
 
 init(autoreset=True)
-
 
 WORDLIST_URL = "https://github.com/halfstackpgr/pytha-fuzz/files/14965324/wordlist.txt"
 
 
 async def download_wordlist(url: str, save_path: str) -> bool:
     try:
-        async with httpx.AsyncClient() as client:
-            client.allow_redirects = True
-            response = await client.get(url)
-            if response.status_code == 200:
-                async with aiofiles.open(save_path, "wb") as file:
-                    await file.write(response.content)
-                return True
-            else:
-                print(
-                    Fore.RED
-                    + f"Failed to download wordlist. Status code: {response.status_code}"
-                )
-                return False
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    async with aiofiles.open(save_path, "wb") as file:
+                        await file.write(await response.read())
+                    return True
+                else:
+                    print(
+                        Fore.RED
+                        + f"Failed to download wordlist. Status code: {response.status}"
+                    )
+                    return False
     except Exception as e:
         print(Fore.RED + f"An error occurred while downloading the wordlist: {e}")
         return False
 
-
-def load_wordlist(wordlist_file: t.Optional[t.Union[pathlib.Path, str]]) -> t.List[str]:
-    if isinstance(wordlist_file, str):
+def load_wordlist(wordlist_file: t.Union[pathlib.Path, str]) -> list[str]:
+    if isinstance(wordlist_file, pathlib.Path):
+        wordlist_path = wordlist_file
+    else:
         wordlist_path = pathlib.Path(wordlist_file)
+        
     if wordlist_path.exists() is False:
         print(Fore.YELLOW + "No wordlist provided. Downloading default wordlist...")
         download_path = "wordlist.txt"
         if not asyncio.run(download_wordlist(WORDLIST_URL, download_path)):
             print(Fore.RED + "Failed to download the default wordlist. Exiting...")
             sys.exit(1)
-        else:
-            print(Fore.GREEN + "Default wordlist downloaded successfully.")
-            wordlist_file = download_path
 
     try:
-        with open(wordlist_file, "r") as file:
+        with wordlist_path.open("r") as file:
             return [line.strip() for line in file.readlines()]
     except FileNotFoundError:
         print(Fore.RED + f"Wordlist file '{wordlist_file}' not found.")
@@ -98,7 +95,7 @@ def print_farewell_message(author_name: str) -> None:
     print(Fore.CYAN + separator)
 
 
-async def save_to_file(output_file: t.Union[pathlib.Path, str], text: str):
+async def save_to_file(output_file: str, text: str) -> None:
     try:
         async with aiofiles.open(output_file, "a", encoding="utf-8") as file:
             await file.write(text + "\n")
@@ -108,45 +105,44 @@ async def save_to_file(output_file: t.Union[pathlib.Path, str], text: str):
 
 async def dirsearch(
     target_url: str,
-    wordlist: t.List[str],
+    wordlist: list[str],
     max_retries: int = 10,
-    timeout: t.Optional[int] = 10,
+    timeout: float = 10.0,
     user_agent: t.Optional[str] = None,
     follow_redirects: bool = True,
-    output_file: t.Optional[t.Union[pathlib.Path, str]] = None,
-):
+    output_file: t.Optional[str] = None,
+) -> None:
     try:
-        async with httpx.AsyncClient() as client:
-            if user_agent is not None:
-                client.headers = {"User-Agent": user_agent}
-
+        async with aiohttp.ClientSession() as session:
             for directory in wordlist:
                 url = f"{target_url}/{directory}"
                 retries = 0
 
                 while retries <= max_retries:
                     try:
-                        response = await client.get(
-                            url, timeout=timeout, allow_redirects=follow_redirects
-                        )
+                        async with session.get(
+                            url,
+                            timeout=timeout,
+                            allow_redirects=follow_redirects,
+                            headers={"User-Agent": user_agent} if user_agent else None,
+                        ) as response:
+                            status_code = response.status
+                            result = f"{print_status_code(status_code)} {url}"
+                            print(result)
 
-                        status_code = response.status_code
-                        result = f"{print_status_code(status_code)} {url}"
-                        print(result)
+                            if output_file:
+                                await save_to_file(output_file, result)
 
-                        if output_file:
-                            await save_to_file(output_file, result)
+                            break
 
-                        break
-
-                    except httpx.NetworkError as e:
+                    except aiohttp.ClientError as e:
                         if retries < max_retries:
                             retries += 1
                             print(
                                 Fore.YELLOW
                                 + f"Network error (retrying {retries}/{max_retries}): {e}"
                             )
-                            await asyncio.sleep(2**retries)
+                            await asyncio.sleep(2 ** retries)
                         else:
                             print(
                                 Fore.RED + f"Network error (max retries reached): {e}"
@@ -168,7 +164,7 @@ async def dirsearch(
 print_welcome_message()
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="A Dir-Miner tool.")
     parser.add_argument("-u", "--url", required=True, help="Target URL to search.")
     parser.add_argument(
@@ -201,10 +197,8 @@ def main():
 
     args = parser.parse_args()
 
-    if args.wordlist is None:
-        wordlist = load_wordlist("wordlist.txt")
-    else:
-        wordlist = load_wordlist(args.wordlist)
+    wordlist_file = args.wordlist or "./wordlist.txt"
+    wordlist = load_wordlist(pathlib.Path(wordlist_file))
 
     asyncio.run(
         dirsearch(
@@ -222,3 +216,7 @@ def main():
 
     if args.output:
         sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
