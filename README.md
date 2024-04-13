@@ -57,12 +57,15 @@ fuzz -u http://example.com // Auto
 
 
 ## Author
-[ShivangMaurya](https://github.com/shivangmauryaa)
+[Shivang Maurya](https://github.com/shivangmauryaa)
 <br>
 [linkedin](https://www.linkedin.com/in/shivangmauryaa/)
 <br>
 
-## Dist Maintainer:
+
+#### Dist Maintainer:
+[halfstackpgr](https://github.com/halfstackpgr/pytha-fuzz)
+
 
 ## License
 
