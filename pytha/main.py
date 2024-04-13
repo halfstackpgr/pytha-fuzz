@@ -10,7 +10,7 @@ from colorama import Fore, Style, init
 init(autoreset=True)
 
 
-WORDLIST_URL = "https://github.com/halfstackpgr/pytha-fuzz/files/14965225/wordlist.txt"
+WORDLIST_URL = "https://github.com/halfstackpgr/pytha-fuzz/files/14965324/wordlist.txt"
 
 
 async def download_wordlist(url: str, save_path: str) -> bool:
