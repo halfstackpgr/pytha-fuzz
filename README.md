@@ -59,8 +59,9 @@ fuzz -u http://example.com // Auto
 ## Author
 [Shivang Maurya](https://github.com/shivangmauryaa)
 <br>
-[linkedin](https://www.linkedin.com/in/shivangmauryaa/)
+[![Linkden](https://github.com/halfstackpgr/pytha-fuzz/assets/118044992/5c0af136-eafa-4641-ae73-4b683c582f64)](https://www.linkedin.com/in/shivangmauryaa/)
 <br>
+
 
 
 #### Dist Maintainer:
