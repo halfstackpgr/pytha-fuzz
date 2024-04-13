@@ -14,7 +14,7 @@ Usage:
 You can use PYTHA directly from the terminal by providing the target URL and a wordlist containing directories to check. Additional options such as customizing the user-agent string, setting timeouts, and specifying output files are available for further customization.
 
 Example Usage:
-$ pytha -u http://example.com -w wordlist.txt -o output.txt
+$ fuzz -u http://example.com -w wordlist.txt -o output.txt
 
 Dependencies:
 PYTHA relies on the following Python packages:
@@ -22,15 +22,13 @@ PYTHA relies on the following Python packages:
 - aiofiles: An async file I/O library for Python.
 - colorama: A cross-platform library for colored terminal text.
 
-For more information and updates, visit the GitHub repository:
-https://github.com/your_username/pytha
 
 Author:
-PYTHA is developed by Your Name. For inquiries, bug reports, or contributions, feel free to contact the author via email or GitHub.
+PYTHA is developed by Shivang. For inquiries, bug reports, or contributions, feel free to contact the author via email or GitHub.
 
 Contact Information:
-- Email: your_email@example.com
-- GitHub: https://github.com/your_username
+- Linkden: https://www.linkedin.com/in/shivangmauryaa/
+- GitHub: https://github.com/shivangmauryaa/pytha-fuzz
 """
 
 from pytha.main import main  # type: ignore
