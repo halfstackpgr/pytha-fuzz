@@ -4,7 +4,7 @@
 
 
 
-> [!WARN]
+> [!IMPORTANT]
 > The current author does not own the repository. It is owned by [Shivang](https://github.com/shivangmauryaa/pytha-fuzz). This is just a module distribution instead of direct source code. Kindly star the original repository if you want to.
 
 
