@@ -1,2 +1,0 @@
-[console_scripts]
-fuzz = pytha.main:main
