@@ -16,17 +16,22 @@ WORDLIST_URL = "https://github.com/halfstackpgr/pytha-fuzz/files/14965324/wordli
 async def download_wordlist(url: str, save_path: str) -> bool:
     try:
         async with httpx.AsyncClient() as client:
+            client.allow_redirects = True
             response = await client.get(url)
             if response.status_code == 200:
                 async with aiofiles.open(save_path, "wb") as file:
                     await file.write(response.content)
                 return True
             else:
-                print(Fore.RED + f"Failed to download wordlist. Status code: {response.status_code}")
+                print(
+                    Fore.RED
+                    + f"Failed to download wordlist. Status code: {response.status_code}"
+                )
                 return False
     except Exception as e:
         print(Fore.RED + f"An error occurred while downloading the wordlist: {e}")
         return False
+
 
 def load_wordlist(wordlist_file: t.Optional[t.Union[pathlib.Path, str]]) -> t.List[str]:
     if isinstance(wordlist_file, str):
