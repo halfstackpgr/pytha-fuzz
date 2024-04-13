@@ -59,7 +59,7 @@ fuzz -u http://example.com // Auto
 ## Author
 [Shivang Maurya](https://github.com/shivangmauryaa)
 <br>
-[![Linkden](https://github.com/halfstackpgr/pytha-fuzz/assets/118044992/5c0af136-eafa-4641-ae73-4b683c582f64)](https://www.linkedin.com/in/shivangmauryaa/)
+[<img src="https://github.com/halfstackpgr/pytha-fuzz/assets/118044992/5c0af136-eafa-4641-ae73-4b683c582f64" width="50" style="border-radius: 50%;">](https://www.linkedin.com/in/shivangmauryaa/)
 <br>
 
 
